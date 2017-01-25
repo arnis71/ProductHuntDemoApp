@@ -7,16 +7,18 @@ import com.activeandroid.annotation.Table;
 /**
  * Created by arnis on 24/01/2017.
  */
-@Table(name = "Categories", id = "cat_id")
+@Table(name = "Categories")
 public class Category extends Model {
-    @Column(name = "id", unique = true, onUniqueConflict = Column.ConflictAction.IGNORE)
-    private long id;
-    @Column
+    @Column(unique = true, onUniqueConflict = Column.ConflictAction.IGNORE)
     private String slug;
     @Column
     private String name;
 
     public Category() {
         super();
+    }
+
+    public String getSlug() {
+        return slug;
     }
 }

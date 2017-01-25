@@ -10,11 +10,8 @@ import com.google.gson.annotations.SerializedName;
  */
 @Table(name = "Posts")
 public class Post extends Model {
-    @Column(unique = true, onUniqueConflict = Column.ConflictAction.IGNORE)
-    @SerializedName("id")
-    private int postID;
 
-    @Column
+    @Column(unique = true, onUniqueConflict = Column.ConflictAction.ABORT)
     private String name;
 
     @Column
@@ -26,22 +23,53 @@ public class Post extends Model {
     private int upVotes;
 
     @Column
-    private Thumbnail thumbnail;
+    private String thumbnailUrl;
 
     @Column
     @SerializedName("redirect_url")
     private String getItUrl;
 
     @Column
-    @SerializedName("screenshot_url")
-    private Screenshot screenshot;
-
-    @Column
-    @SerializedName("category_id")
-    private int categoryID;
+    private String screenshotUrl;
 
     public Post() {
         super();
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public void setScreenshotUrl(String screenshotUrl) {
+        this.screenshotUrl = screenshotUrl;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setUpVotes(int upVotes) {
+        this.upVotes = upVotes;
+    }
+
+    public void setGetItUrl(String getItUrl) {
+        this.getItUrl = getItUrl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
     }
 
 

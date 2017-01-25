@@ -12,4 +12,7 @@ public class PostList {
     public List<Post> getPosts() {
         return posts;
     }
+    public Post getLast(){
+        return posts.get(posts.size()-1);
+    }
 }

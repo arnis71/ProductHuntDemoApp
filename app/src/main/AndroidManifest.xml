@@ -3,6 +3,8 @@
     package="ru.arnis.producthuntdemoapp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
     <application
         android:allowBackup="true"
@@ -21,6 +23,13 @@
         <meta-data
             android:name="AA_MODELS"
             android:value="ru.arnis.producthuntdemoapp.model.Category, ru.arnis.producthuntdemoapp.model.Post, ru.arnis.producthuntdemoapp.model.Screenshot, ru.arnis.producthuntdemoapp.model.Thumbnail" />
+        <receiver android:name=".service.PostUpdateReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".service.PostUpdateService" android:exported="false"/>
     </application>
 
 </manifest>
