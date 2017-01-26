@@ -68,16 +68,16 @@ public class ProductHuntClient {
     }
 
     @WorkerThread
-    public Map<String,PostList> getPostsByCategory(String explicitCategory){
-        Map<String,PostList> postsByCat = new HashMap<>();
+    public Map<Category,PostList> getPostsByCategory(String explicitCategory){
+        Map<Category,PostList> postsByCat = new HashMap<>();
         try {
             if (explicitCategory!=null){
-                postsByCat.put(explicitCategory, getPosts(explicitCategory).execute().body());
+                postsByCat.put(new Category(explicitCategory), getPosts(explicitCategory).execute().body());
             } else {
                 CategoryList catList = getCategories().execute().body();
                 for (Category category : catList.getCategories()) {
                     PostList postList = getPosts(category.getSlug()).execute().body();
-                    postsByCat.put(category.getSlug(), postList);
+                    postsByCat.put(category, postList);
                 }
             }
         } catch (IOException e){

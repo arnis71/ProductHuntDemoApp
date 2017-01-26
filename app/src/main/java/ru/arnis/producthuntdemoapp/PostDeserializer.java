@@ -45,5 +45,6 @@ public class PostDeserializer implements JsonDeserializer<Post> {
         post.setDescription(json.getAsJsonObject().get("tagline").getAsString());
         post.setUpVotes(json.getAsJsonObject().get("votes_count").getAsInt());
         post.setGetItUrl(json.getAsJsonObject().get("redirect_url").getAsString());
+        post.setFromCategory(json.getAsJsonObject().get("category_id").getAsInt());
     }
 }

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import ru.arnis.producthuntdemoapp.R;
+import ru.arnis.producthuntdemoapp.model.Category;
 import ru.arnis.producthuntdemoapp.model.Post;
 import ru.arnis.producthuntdemoapp.model.PostList;
 import ru.arnis.producthuntdemoapp.network.ProductHuntClient;
@@ -60,43 +61,43 @@ public class UpdateDataService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String explicitCategory = intent.getStringExtra(CATEGORY);
 
-        Map<String, PostList> data = ProductHuntClient.getClient().getPostsByCategory(explicitCategory);
-        writeToDB(data);
+        Map<Category, PostList> data = ProductHuntClient.getClient().getPostsByCategory(explicitCategory);
 
         SharedPreferences preferences = getSharedPreferences(DB,MODE_PRIVATE);
         Post post = null;
         Map<String,Integer> notificationData = new HashMap<>();
 
-        for (String category: data.keySet()) {
+        for (Category category: data.keySet()) {
             List<Post> postList = data.get(category).getPosts();
 
-            int newPosts = postList.size() - preferences.getInt(category, 0);
-            //preferences.edit().putInt(category.getSlug(),postList.size()).apply();
+            int newPosts = postList.size() - preferences.getInt(category.getSlug(), 0);
+            preferences.edit().putInt(category.getSlug(),postList.size()).apply();
 
             if (newPosts == 1 && post == null) {
                 post = data.get(category).getLast();
             } else if (newPosts>1)
-                notificationData.put(category, newPosts);
+                notificationData.put(category.getSlug(), newPosts);
         }
+
+        writeToDB(data);
 
         if (!activityCallback(intent, explicitCategory))
             sendNotification(notificationData, post);
     }
 
-    private void writeToDB(Map<String, PostList> data){
-        for (String category :data.keySet()){
-            List<Post> list = data.get(category).getPosts();
-            if (list.size()!=0){
-                ActiveAndroid.beginTransaction();
-                try{
+    private void writeToDB(Map<Category, PostList> data){
+        ActiveAndroid.beginTransaction();
+        try{
+            for (Category category :data.keySet()){
+                List<Post> list = data.get(category).getPosts();
+                if (list.size()!=0)
                     for (Post post: data.get(category).getPosts())
                         post.save();
-                    ActiveAndroid.setTransactionSuccessful();
-                } finally{
-                    ActiveAndroid.endTransaction();
-                }
+                category.save();
             }
-
+            ActiveAndroid.setTransactionSuccessful();
+        } finally {
+        ActiveAndroid.endTransaction();
         }
     }
 

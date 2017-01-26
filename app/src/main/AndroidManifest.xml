@@ -2,34 +2,42 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.arnis.producthuntdemoapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
+        android:name=".ProducthuntApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".ProducthuntApplication">
-        <activity android:name=".view.MainActivity">
+        android:theme="@style/AppTheme">
+        <activity android:name=".view.MainActivity"/>
+        <activity android:name=".view.SplashScreenActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="AA_MODELS"
             android:value="ru.arnis.producthuntdemoapp.model.Category, ru.arnis.producthuntdemoapp.model.Post, ru.arnis.producthuntdemoapp.model.Screenshot, ru.arnis.producthuntdemoapp.model.Thumbnail" />
+
         <receiver android:name=".service.RequestUpdateData">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-        <service android:name=".service.UpdateDataService" android:exported="false"/>
+
+        <service
+            android:name=".service.UpdateDataService"
+            android:exported="false" />
     </application>
 
 </manifest>

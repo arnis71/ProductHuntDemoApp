@@ -11,12 +11,16 @@ import com.google.gson.annotations.SerializedName;
 @Table(name = "Posts")
 public class Post extends Model {
 
-    @Column(unique = true, onUniqueConflict = Column.ConflictAction.IGNORE)
+    @Column(unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private String name;
 
     @Column
     @SerializedName("tagline")
     private String description;
+
+    @Column
+    @SerializedName("category_id")
+    private long fromCategory;
 
     @Column
     @SerializedName("votes_count")
@@ -60,6 +64,10 @@ public class Post extends Model {
         this.getItUrl = getItUrl;
     }
 
+    public void setFromCategory(long fromCategory) {
+        this.fromCategory = fromCategory;
+    }
+
     public String getName() {
         return name;
     }
@@ -72,5 +80,15 @@ public class Post extends Model {
         return thumbnailUrl;
     }
 
+    public String getScreenshotUrl() {
+        return screenshotUrl;
+    }
 
+    public int getUpVotes() {
+        return upVotes;
+    }
+
+    public String getGetItUrl() {
+        return getItUrl;
+    }
 }
