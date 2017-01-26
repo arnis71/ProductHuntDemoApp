@@ -23,13 +23,13 @@
         <meta-data
             android:name="AA_MODELS"
             android:value="ru.arnis.producthuntdemoapp.model.Category, ru.arnis.producthuntdemoapp.model.Post, ru.arnis.producthuntdemoapp.model.Screenshot, ru.arnis.producthuntdemoapp.model.Thumbnail" />
-        <receiver android:name=".service.PostUpdateReceiver">
+        <receiver android:name=".service.RequestUpdateData">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-        <service android:name=".service.PostUpdateService" android:exported="false"/>
+        <service android:name=".service.UpdateDataService" android:exported="false"/>
     </application>
 
 </manifest>

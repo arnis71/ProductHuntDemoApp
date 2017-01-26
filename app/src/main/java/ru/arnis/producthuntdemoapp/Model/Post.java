@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 @Table(name = "Posts")
 public class Post extends Model {
 
-    @Column(unique = true, onUniqueConflict = Column.ConflictAction.ABORT)
+    @Column(unique = true, onUniqueConflict = Column.ConflictAction.IGNORE)
     private String name;
 
     @Column

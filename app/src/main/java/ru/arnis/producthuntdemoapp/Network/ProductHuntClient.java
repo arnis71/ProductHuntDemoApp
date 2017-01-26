@@ -31,7 +31,6 @@ public class ProductHuntClient {
     private static ProductHuntClient client;
     private API api;
 
-
     public static ProductHuntClient getClient(){
         if (client==null) {
             client = new ProductHuntClient();
@@ -44,9 +43,9 @@ public class ProductHuntClient {
     private void init(){
         OkHttpClient httpClient = new OkHttpClient.Builder().build();
 
-        //for ActiveAndroid and Retrofit compatibility
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Post.class, new PostDeserializer())
+                //for ActiveAndroid and Retrofit compatibility
                 .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
                 .serializeNulls()
                 .create();
@@ -60,23 +59,26 @@ public class ProductHuntClient {
         api = retrofit.create(API.class);
     }
 
-    public Call<CategoryList> getCategories(){
+    private Call<CategoryList> getCategories(){
         return api.getCategories(API_KEY);
     }
 
-    public Call<PostList> getPosts(String cat){
+    private Call<PostList> getPosts(String cat){
         return api.getPosts(cat, API_KEY);
     }
 
     @WorkerThread
-    public Map<String,PostList> getPostsByCategory(){
+    public Map<String,PostList> getPostsByCategory(String explicitCategory){
         Map<String,PostList> postsByCat = new HashMap<>();
         try {
-            CategoryList catList = getCategories().execute().body();
-            for (Category category: catList.getCategories()){
-                String slug = category.getSlug();
-                PostList postList = getPosts(slug).execute().body();
-                postsByCat.put(slug,postList);
+            if (explicitCategory!=null){
+                postsByCat.put(explicitCategory, getPosts(explicitCategory).execute().body());
+            } else {
+                CategoryList catList = getCategories().execute().body();
+                for (Category category : catList.getCategories()) {
+                    PostList postList = getPosts(category.getSlug()).execute().body();
+                    postsByCat.put(category.getSlug(), postList);
+                }
             }
         } catch (IOException e){
             e.printStackTrace();
