@@ -116,7 +116,7 @@ public class UpdateDataService extends IntentService {
     private void sendNotification(Map<String,Integer> notificationData, Post onlyPost){
         if (notificationData.size()==1&&notificationData.values().iterator().next()==1)
             notifySingle(onlyPost);
-        else
+        else //if (notificationData.size()>0)
             notifyMultiple(notificationData);
     }
 

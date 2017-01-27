@@ -30,6 +30,8 @@ public class CategoryFragment extends Fragment{
     RecyclerView recyclerView;
     @BindView(R.id.swipe_to_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.no_items_placeholder)
+    View noItemsPlaceholder;
     RecyclerViewAdapter adapter;
     private List<Post> posts;
     private String categoryName;
@@ -66,6 +68,7 @@ public class CategoryFragment extends Fragment{
                 UpdateDataService.startInApp(getContext(),((MainActivity)getActivity()).receiver,categoryName);
             }
         });
+        checkIfEmpty();
 
         return view;
     }
@@ -79,7 +82,14 @@ public class CategoryFragment extends Fragment{
     public void stopRefresh(){
         if (swipeRefreshLayout!=null && swipeRefreshLayout.isRefreshing()){
             adapter.notifyDataSetChanged();
+            checkIfEmpty();
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    private void checkIfEmpty(){
+        if (getPosts().size()==0){
+            noItemsPlaceholder.setVisibility(View.VISIBLE);
+        } else noItemsPlaceholder.setVisibility(View.GONE);
     }
 }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_post"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:padding="20dp"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
+                <ImageView
+                    android:id="@+id/post_thumbnail"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dp"/>
+                <LinearLayout
+                    android:id="@+id/post_info"
+                    android:layout_toRightOf="@id/post_thumbnail"
+                    android:layout_toEndOf="@id/post_thumbnail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/post_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Title"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textColorPrimary"/>
+                    <TextView
+                        android:id="@+id/post_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="description"
+                        android:textSize="18sp"
+                        android:textColor="@color/textColorPrimary"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_toEndOf="@id/post_thumbnail"
+                    android:layout_toRightOf="@id/post_thumbnail"
+                    android:layout_below="@id/post_info"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end">
+                    <Button
+                        android:id="@+id/get_it"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorAccent"
+                        android:textColor="@color/colorSecondary"
+                        android:text="GET IT!"/>
+                    <Button
+                        android:id="@+id/up_votes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_arrow_up"
+                        android:drawableStart="@drawable/ic_arrow_up"
+                        android:textColor="@color/colorAccent"
+                        android:text="777" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <ImageView
+            android:id="@+id/post_screenshot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

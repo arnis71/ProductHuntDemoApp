@@ -55,9 +55,8 @@ public class MainActivity extends AppCompatActivity implements UpdateDataCallbac
 
         displayData(null);
 
-
-        setAlarm();
-        checkAlarm();
+        if (!checkAlarm())
+             setAlarm();
 
         receiver = UpdateDataCallback.create(this);
         UpdateDataService.startInApp(this,receiver);
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements UpdateDataCallbac
         Intent intent = new Intent(this, RequestUpdateData.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long interval = 1000 * 60 * 10;
+        long interval = 1000 * 60 * 5;
         long jitter = 0;
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval, interval, pendingIntent);
     }

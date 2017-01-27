@@ -2,6 +2,7 @@ package ru.arnis.producthuntdemoapp.adapter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,11 @@ import com.bumptech.glide.request.animation.ViewPropertyAnimation;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.arnis.producthuntdemoapp.PostClickListener;
 import ru.arnis.producthuntdemoapp.R;
 import ru.arnis.producthuntdemoapp.model.Post;
 import ru.arnis.producthuntdemoapp.view.CategoryFragment;
+import ru.arnis.producthuntdemoapp.view.PostActivity;
 
 /**
  * Created by arnis on 26/01/2017.
@@ -47,7 +50,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.background)
         ImageView background;
         @BindView(R.id.post_title)
@@ -56,22 +59,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView postDescription;
         @BindView(R.id.up_votes)
         Button upVotes;
+        PostClickListener postClickListener;
 
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        public void setPostClickListener(PostClickListener postClickListener) {
+            this.postClickListener = postClickListener;
         }
 
         void clearAnimation(){
             itemView.clearAnimation();
         }
+
+        @Override
+        public void onClick(View v) {
+            if (postClickListener!=null)
+                postClickListener.onClick(this.getLayoutPosition());
+        }
     }
 
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.post_card, parent, false);
-        return new ViewHolder(view);
+        CardView view = (CardView) LayoutInflater.from(context).inflate(R.layout.post_card, parent, false);
+        final RecyclerViewAdapter.ViewHolder viewHolder = new ViewHolder(view);
+        viewHolder.setPostClickListener(new PostClickListener() {
+            @Override
+            public void onClick(int postIndex) {
+                PostActivity.launch(context,categoryFragment.getPosts().get(postIndex).getName());
+            }
+        });
+        return viewHolder;
     }
 
 
