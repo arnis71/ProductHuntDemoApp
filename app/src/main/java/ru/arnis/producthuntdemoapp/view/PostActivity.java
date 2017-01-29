@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 import com.bumptech.glide.Glide;
@@ -27,6 +26,9 @@ import ru.arnis.producthuntdemoapp.R;
 import ru.arnis.producthuntdemoapp.model.Post;
 
 public class PostActivity extends AppCompatActivity {
+    public static final String POST_EXTRA = "post_extra";
+    public static final String CHROME_TABS_PACKAGE = "com.android.chrome";
+
     @BindView(R.id.post_title)
     TextView title;
     @BindView(R.id.post_description)
@@ -47,7 +49,7 @@ public class PostActivity extends AppCompatActivity {
 
     public static void launch(Context context, String postName){
         Intent intent = new Intent(context, PostActivity.class);
-        intent.putExtra("postname",postName);
+        intent.putExtra(POST_EXTRA,postName);
         context.startActivity(intent);
     }
 
@@ -56,7 +58,6 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         ButterKnife.bind(this);
-        final PostActivity postActivity = this;
         getPost();
 
         CustomTabsServiceConnection connection = new CustomTabsServiceConnection() {
@@ -65,7 +66,6 @@ public class PostActivity extends AppCompatActivity {
                 client.warmup(0);
                 session = client.newSession(null);
                 session.mayLaunchUrl(Uri.parse(post.getGetItUrl()),null,null);
-                Toast.makeText(postActivity, "CONNECTION", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -74,8 +74,7 @@ public class PostActivity extends AppCompatActivity {
             }
         };
 
-        boolean ok = CustomTabsClient.bindCustomTabsService(this,"com.android.chrome",connection);
-        Toast.makeText(postActivity, "connection " +String.valueOf(ok), Toast.LENGTH_SHORT).show();
+        CustomTabsClient.bindCustomTabsService(this,CHROME_TABS_PACKAGE,connection);
 
         title.setText(post.getName());
         description.setText(post.getDescription());
@@ -93,7 +92,7 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void getPost(){
-        String postName = getIntent().getStringExtra("postname");
+        String postName = getIntent().getStringExtra(POST_EXTRA);
         if (postName!=null)
             post = (Post) new Select()
                 .from(Post.class)

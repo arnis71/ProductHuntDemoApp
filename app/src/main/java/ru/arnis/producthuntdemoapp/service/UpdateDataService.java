@@ -13,6 +13,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.os.ResultReceiver;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
 
 import java.util.HashMap;
 import java.util.List;
@@ -75,8 +77,9 @@ public class UpdateDataService extends IntentService {
 
             if (newPosts == 1 && post == null) {
                 post = data.get(category).getLast();
-            } else if (newPosts>1)
-                notificationData.put(category.getSlug(), newPosts);
+            }
+
+            notificationData.put(category.getSlug(), newPosts);
         }
 
         writeToDB(data);
@@ -93,12 +96,21 @@ public class UpdateDataService extends IntentService {
                 if (list.size()!=0)
                     for (Post post: data.get(category).getPosts())
                         post.save();
+                else
+                    wipeDB(category);
                 category.save();
             }
             ActiveAndroid.setTransactionSuccessful();
         } finally {
-        ActiveAndroid.endTransaction();
+            ActiveAndroid.endTransaction();
         }
+    }
+
+    private void wipeDB(Category category) {
+        new Delete()
+                .from(Post.class)
+                .where("fromCategory = ?", category.getCatID())
+                .execute();
     }
 
     private boolean activityCallback(Intent intent, String explicitCategory){
@@ -114,13 +126,36 @@ public class UpdateDataService extends IntentService {
     }
 
     private void sendNotification(Map<String,Integer> notificationData, Post onlyPost){
-        if (notificationData.size()==1&&notificationData.values().iterator().next()==1)
-            notifySingle(onlyPost);
-        else //if (notificationData.size()>0)
+        int total = 0;
+        for (Integer integer:notificationData.values())
+            total+=integer;
+        if (total==1)
+            notifySingle(onlyPost, ((Category) new Select()
+                .from(Category.class)
+                .where("catID = ?", onlyPost.getFromCategory())
+                .execute()).getSlug());
+        else if (total>0)
             notifyMultiple(notificationData);
+        else notifyNo();
     }
 
-    private void notifySingle(Post post){
+    private void notifyNo() {
+        NotificationManager manager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+
+        builder.setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("nothing new")
+                .setContentText("no")
+                .setPriority(Notification.PRIORITY_MAX)
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setDefaults(Notification.DEFAULT_SOUND)
+                .setLights(Color.RED,1000,1000)
+                .setAutoCancel(true);
+
+        manager.notify(1,builder.build());
+    }
+
+    private void notifySingle(Post post, String category){
         NotificationManager manager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
 
@@ -130,7 +165,7 @@ public class UpdateDataService extends IntentService {
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,intent,0);
 
         builder.setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("В категории "+ post.getName()+" появился новый пост")
+                .setContentTitle("В категории "+ category +" появился новый пост: "+ post.getName())
                 .setContentText(post.getDescription())
                 .setPriority(Notification.PRIORITY_MAX)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
@@ -150,7 +185,9 @@ public class UpdateDataService extends IntentService {
         inboxStyle.setBigContentTitle("Новые посты:");
 
         for (String category: newPosts.keySet()){
-            inboxStyle.addLine("В категории "+ category +" появилось "+ newPosts.get(category) +" постов");
+            int num = newPosts.get(category);
+            if (num!=0)
+                inboxStyle.addLine("В категории "+ category +" появились новые посты: "+ String.valueOf(num));
         }
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -160,7 +197,6 @@ public class UpdateDataService extends IntentService {
 
         builder.setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("В нескольких категоряих появились новые посты")
-                //.setContentText(post.getDescription())
                 .setPriority(Notification.PRIORITY_MAX)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setDefaults(Notification.DEFAULT_SOUND)

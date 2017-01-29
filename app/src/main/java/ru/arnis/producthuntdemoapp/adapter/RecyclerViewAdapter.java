@@ -68,7 +68,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             itemView.setOnClickListener(this);
         }
 
-        public void setPostClickListener(PostClickListener postClickListener) {
+        void setPostClickListener(PostClickListener postClickListener) {
             this.postClickListener = postClickListener;
         }
 
@@ -85,12 +85,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        CardView view = (CardView) LayoutInflater.from(context).inflate(R.layout.post_card, parent, false);
+        final CardView view = (CardView) LayoutInflater.from(context).inflate(R.layout.post_card, parent, false);
         final RecyclerViewAdapter.ViewHolder viewHolder = new ViewHolder(view);
         viewHolder.setPostClickListener(new PostClickListener() {
             @Override
-            public void onClick(int postIndex) {
-                PostActivity.launch(context,categoryFragment.getPosts().get(postIndex).getName());
+            public void onClick(final int postIndex) {
+                view.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        PostActivity.launch(context,categoryFragment.getPosts().get(postIndex).getName());
+                    }
+                },100);
             }
         });
         return viewHolder;

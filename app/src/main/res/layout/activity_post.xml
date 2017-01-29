@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_post"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -52,32 +51,33 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:layout_toEndOf="@id/post_thumbnail"
                     android:layout_toRightOf="@id/post_thumbnail"
                     android:layout_below="@id/post_info"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:gravity="end">
+                    android:gravity="end"
+                    android:clipToPadding="false">
                     <Button
                         android:id="@+id/get_it"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorAccent"
+                        android:background="@drawable/getit_button"
                         android:textColor="@color/colorSecondary"
-                        android:text="GET IT!"/>
+                        android:text="@string/get_it_button"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"/>
                     <Button
                         android:id="@+id/up_votes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_arrow_up"
-                        android:drawableStart="@drawable/ic_arrow_up"
-                        android:textColor="@color/colorAccent"
-                        android:text="777" />
+                        android:drawableLeft="@drawable/ic_arrow_up_dark"
+                        android:drawableStart="@drawable/ic_arrow_up_dark"
+                        android:background="@drawable/upvotes_button"
+                        android:textColor="@color/textColorPrimary"/>
                 </LinearLayout>
-
             </RelativeLayout>
-
         </android.support.v7.widget.CardView>
 
         <ImageView

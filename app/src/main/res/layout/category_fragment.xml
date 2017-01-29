@@ -14,7 +14,6 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
             </android.support.v7.widget.RecyclerView>
 
             <RelativeLayout
@@ -35,7 +34,7 @@
                     android:textSize="18sp"
                     android:gravity="center"
                     android:padding="40dp"
-                    android:text="В этой категории нет новых постов на сегодня"/>
+                    android:text="@string/no_new_posts"/>
             </RelativeLayout>
         </RelativeLayout>
 

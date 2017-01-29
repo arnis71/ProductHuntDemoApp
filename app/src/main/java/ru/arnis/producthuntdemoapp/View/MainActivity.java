@@ -9,10 +9,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.activeandroid.query.Select;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,13 +54,17 @@ public class MainActivity extends AppCompatActivity implements UpdateDataCallbac
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        displayData(null);
-
-        if (!checkAlarm())
-             setAlarm();
-
         receiver = UpdateDataCallback.create(this);
         UpdateDataService.startInApp(this,receiver);
+
+        if (!checkAlarm())
+            setAlarm();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        displayData(null);
     }
 
     @Override
@@ -103,14 +108,14 @@ public class MainActivity extends AppCompatActivity implements UpdateDataCallbac
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         long interval = 1000 * 60 * 5;
-        long jitter = 0;
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval, interval, pendingIntent);
+        long jitter = new SecureRandom().nextInt(1000 * 60 * 10);
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval, interval + jitter, pendingIntent);
     }
     private boolean checkAlarm(){
         boolean alarmUp =  (PendingIntent.getBroadcast(this, 0,
                 new Intent(this,RequestUpdateData.class),
                 PendingIntent.FLAG_NO_CREATE) != null);
-        Toast.makeText(this, "Alarm up "+String.valueOf(alarmUp), Toast.LENGTH_SHORT).show();
+        Log.d("happy","Alarm up " + String.valueOf(alarmUp));
         return alarmUp;
     }
 
@@ -118,9 +123,5 @@ public class MainActivity extends AppCompatActivity implements UpdateDataCallbac
     public void onReceiveResult(int resultCode, Bundle resultData) {
         String explicitCat = resultData.getString(UpdateDataService.CATEGORY);
         displayData(explicitCat);
-//        if (explicitCat==null){
-//        } else {
-//            pagerAdapter.categoryFragmentUpdate(explicitCat);
-//        }
     }
 }

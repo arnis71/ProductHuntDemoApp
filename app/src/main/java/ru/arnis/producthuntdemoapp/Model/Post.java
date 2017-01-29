@@ -91,4 +91,8 @@ public class Post extends Model {
     public String getGetItUrl() {
         return getItUrl;
     }
+
+    public long getFromCategory() {
+        return fromCategory;
+    }
 }

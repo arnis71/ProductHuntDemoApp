@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ProductHunt Demo</string>
+    <string name="no_new_posts">В этой категории нет новых постов на сегодня</string>
+    <string name="get_it_button">GET IT</string>
 </resources>

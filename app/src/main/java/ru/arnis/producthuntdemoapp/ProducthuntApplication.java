@@ -12,7 +12,7 @@ public class ProducthuntApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Configuration dbConfiguration = new Configuration.Builder(this).setDatabaseName("PHdata.db").setDatabaseVersion(2).create();
+        Configuration dbConfiguration = new Configuration.Builder(this).setDatabaseName("PHdata.db").setDatabaseVersion(1).create();
         ActiveAndroid.initialize(dbConfiguration);
     }
 }
