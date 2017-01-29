@@ -136,23 +136,6 @@ public class UpdateDataService extends IntentService {
                 .execute()).getSlug());
         else if (total>0)
             notifyMultiple(notificationData);
-        else notifyNo();
-    }
-
-    private void notifyNo() {
-        NotificationManager manager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-
-        builder.setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("nothing new")
-                .setContentText("no")
-                .setPriority(Notification.PRIORITY_MAX)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setDefaults(Notification.DEFAULT_SOUND)
-                .setLights(Color.RED,1000,1000)
-                .setAutoCancel(true);
-
-        manager.notify(1,builder.build());
     }
 
     private void notifySingle(Post post, String category){

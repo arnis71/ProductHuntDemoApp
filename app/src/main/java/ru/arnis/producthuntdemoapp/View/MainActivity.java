@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements UpdateDataCallbac
         Intent intent = new Intent(this, RequestUpdateData.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long interval = 1000 * 60 * 5;
+        long interval = 1000 * 60 * 20;
         long jitter = new SecureRandom().nextInt(1000 * 60 * 10);
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval, interval + jitter, pendingIntent);
     }
