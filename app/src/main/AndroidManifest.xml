@@ -40,7 +40,7 @@
             android:name=".service.UpdateDataService"
             android:exported="false" />
 
-        <activity android:name=".view.PostActivity"></activity>
+        <activity android:name=".view.PostActivity" android:orientation="vertical"/>
     </application>
 
 </manifest>
