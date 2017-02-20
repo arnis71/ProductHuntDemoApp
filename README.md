@@ -1,5 +1,5 @@
 # ProductHunt Demo app
-Product Hunt demo app that shows today's posts in each of the categories (**designed for demo purposes only!**).
+Product Hunt demo app that shows today's posts in each of the categories that was made in 4 days (**designed for demo purposes only!**).
 
 [Download APK](https://docs.google.com/uc?export=download&id=0B6oDaS88X4yKRXVVUDJYRmtqb3M)
 
